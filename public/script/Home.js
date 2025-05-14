@@ -1,4 +1,3 @@
-import { CarregarProdutos } from './Produtos.js'
 
 const H4FooterCreditos = document.getElementById('H4FooterCreditos')
 const SpanCategoriasUm = document.getElementById('SpanCategoriasUm')
@@ -46,7 +45,35 @@ function GerarListaDeProdutos() {
     })
 }
 
-CarregarProdutos(ProdutosList, GerarListaDeProdutos) // Carregar a lista de produtos
+document.addEventListener("DOMContentLoaded", () => {
+  fetch('/produtos')  // Requisição para pegar os produtos
+    .then(response => response.json())
+    .then(produtos => {
+      const produtosLista = document.getElementById('produtos-lista');
+      produtos.forEach(produto => {
+        const produtoDiv = document.createElement('div');
+        produtoDiv.classList.add('CardProdutosHome');
+
+        // Estrutura do produto
+        produtoDiv.innerHTML = `
+       
+
+          <img src="/imagens_div/produtos/${produto.id_produto}.webp" alt="Imagem do Produto ${produto.nome}">
+
+            <p>${produto.nome}</p>
+          </div>
+          <div class="Bottom">
+            <p>R$ ${produto.preco}</p>
+            <button>Ver mais</button>
+          </div>
+          </div> 
+        `;
+
+        produtosLista.appendChild(produtoDiv);
+      });
+    })
+    .catch(error => console.error('Erro ao carregar os produtos:', error));
+});
 
 addEventListener('DOMContentLoaded', () => {
 
@@ -73,3 +100,4 @@ BtnToggleCategorias.forEach(Btn => {
         SpanCategoriasTrez.classList.toggle("SpanCategoriasTrez")
     }
 })
+
