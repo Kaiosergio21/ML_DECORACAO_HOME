@@ -45,6 +45,27 @@ app.get('/produtos', (req, res) => {
   });
 });
 
+app.get('/produtos/categoria/:categoria', (req, res) => {
+  const categoria = req.params.categoria;
+
+  let sql = 'SELECT * FROM produto';
+  const values = [];
+
+  if (categoria !== 'todos') {
+    sql += ' WHERE categoria = ?';
+    values.push(categoria);
+  }
+
+  db.query(sql, values, (err, results) => {
+    if (err) {
+      console.error('Erro ao buscar produtos por categoria:', err.message);
+      return res.status(500).json({ error: 'Erro ao buscar produtos' });
+    }
+    res.json(results);
+  });
+});
+
+
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });
