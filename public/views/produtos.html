@@ -13,8 +13,8 @@
 
         <div class="container">
             <div class="containerOption">
-                <img src="file/shopping-cart.png" alt="Carrinho de compras">
-                <img src="file/hearth.png" alt="Favoritos">
+                <img src="../file/shopping-cart.png" alt="Carrinho de compras">
+                <img src="../file/hearth.png" alt="Favoritos">
             </div>
 
             <div class="ImageUser"></div>
@@ -34,7 +34,7 @@
     </div>
 
     <div class="placeback">
-        <button>Voltar</button>
+        <button onclick="window.location.href='../views/Home.html'">Voltar</button>
     </div>
 
     <main>
@@ -42,26 +42,40 @@
         <div class="container-produtos">
 
             <div class="foto-produto">
-                <img src="file/Sem título.jpg" alt="" srcset="">
-            </div>
+    <div class="carousel">
+        <button class="prev">&#10094;</button>
+
+        <img class="carousel-img active" src="../imagens_div/produtos/festa_safari.webp" alt="Imagem 1">
+        <img class="carousel-img active" src="../file/produto2.jpg" alt="Imagem 2">
+        <img class="carousel-img active" src="../file/produto3.jpg" alt="Imagem 3">
+
+        <button class="next">&#10095;</button>
+    </div>
+</div>
 
             <div class="Informaçoes-all">
                 
                 <div class="Informaçoes-geral">
-                    <div class="name-heart">
-                    <p>Decoração de Aniversario Tubarãos</p>
-                    <img src="file/hearth.png" alt="Simbolo de Favoritos">
-                    </div>
+                <div class="name-heart">
+  <p>Decoração de Aniversario Tubarãos</p>
+<a id="btn-favorito" aria-label="Favorito">♡</a>
+
+</div>
+
                     <div class="price-star">
-                    <p>Preço R$ 700</p>
-                    <ul>
-                        <li>&#9734;</li>
-                        <li>&#9734;</li>
-                        <li>&#9734;</li>
-                        <li>&#9734;</li>
-                        <li>&#9734;</li>
+            <p>Preço R$ 700</p>
+                    
+  <div class="estrelas" id="estrelas" style="display: flex; gap: 5px; font-size: 24px; cursor: pointer;">
+  <span data-valor="1">&#9734;</span>
+  <span data-valor="2">&#9734;</span>
+  <span data-valor="3">&#9734;</span>
+  <span data-valor="4">&#9734;</span>
+  <span data-valor="5">&#9734;</span>
+</div>
+
+                 
                 
-                    </ul>
+                 
                     </div>
                 </div>
                 <div class="descricao">
@@ -95,34 +109,15 @@
       <div class="user-comentario">
             <div class="foto-user"></div>
             <p>nome do usuario</p>
-            <input type="text" placeholder="Digite sua opnião sobre o Produto">
-            <button>Enviar</button>
-      </div>    
-
-      <div class="user-comentario">
-        <div class="foto-user"></div>
-        <p>nome do usuario</p>
-        <input type="text" placeholder="Digite sua opnião sobre o Produto">
-        <button>Enviar</button>
-    </div>
-
-    <div class="user-comentario">
-        <div class="foto-user"></div>
-        <p>nome do usuario</p>
-        <input type="text" placeholder="Digite sua opnião sobre o Produto">
-        <button>Enviar</button>
-  </div>
-
-  <div class="user-comentario">
-    <div class="foto-user"></div>
-    <p id="Usuario">Markitos</p>
-    <p>Seu corno kskskskksskkss otario</p>
-    <p>Com cores vibrantes, elementos do fundo do mar e detalhes divertidos, esse tema é perfeito para encantar crianças e impressionar os convidados.</p>
-    Com cores vibrantes, elementos do fundo do mar e detalhes divertidos, esse tema é perfeito para encantar crianças e impressionar os convidados.    
-    Com cores vibrantes, elementos do fundo do mar e detalhes divertidos, esse tema é perfeito para encantar crianças e impressionar os convidados.
-    Com cores vibrantes, elementos do fundo do mar e detalhes divertidos, esse tema é perfeito para encantar crianças e impressionar os convidados.
+     <input type="hidden" id="produto-id" value="1">
+    <input type="text" id="comentario" placeholder="Digite sua opinião sobre o Produto">
+    <button onclick="enviarAvaliacao()">Enviar</button>
     
-   </div>
+  </div>
+<div id="lista-avaliacoes" style="width: 100%; max-width: 500px;"></div>
+     
+
+
 
     </section>
 
@@ -158,6 +153,9 @@
 
     </footer>
 
-<script src="script.js"></script>
+<script src="/script/produtos.js"></script>
+
+
+
 </body>
 </html>
