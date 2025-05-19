@@ -1,225 +1,161 @@
-const menu = document.getElementById("dropdown-menu");
-const botaoMenu = document.getElementById("button-all");
-
-
-botaoMenu.addEventListener("click", () => {
-    menu.classList.toggle("ativo");
-    menu.classList.toggle("menucult");
-});
-
-//carrousel
-    const images = document.querySelectorAll('.carousel-img');
-    const prev = document.querySelector('.prev');
-    const next = document.querySelector('.next');
-    let current = 0;
-
-    function showImage(index) {
-        images.forEach((img, i) => {
-            img.classList.remove('active');
-            if (i === index) img.classList.add('active');
-        });
-    }
-
-    prev.addEventListener('click', () => {
-        current = (current === 0) ? images.length - 1 : current - 1;
-        showImage(current);
-    });
-
-    next.addEventListener('click', () => {
-        current = (current === images.length - 1) ? 0 : current + 1;
-        showImage(current);
-    });
-
-    // Mostrar a primeira imagem
-    showImage(current);
-
-
-let estrelasSelecionadas = 0;
-
-function atualizarVisualEstrelas() {
-  const estrelas = document.querySelectorAll('#estrelas span');
-  estrelas.forEach(star => {
-    const valor = parseInt(star.getAttribute('data-valor'));
-    star.textContent = valor <= estrelasSelecionadas ? '★' : '☆';
-    star.style.color = valor <= estrelasSelecionadas ? 'gold' : '#999';
-  });
-}
-
-
-
-function configurarEstrelas() {
-  const estrelas = document.querySelectorAll('#estrelas span');
-  estrelas.forEach(star => {
-    star.addEventListener('click', () => {
-      estrelasSelecionadas = parseInt(star.getAttribute('data-valor'));
-      atualizarVisualEstrelas();
-    });
-
-    // Opcional: destacar estrelas no hover
-    star.addEventListener('mouseenter', () => {
-      const valor = parseInt(star.getAttribute('data-valor'));
-      preencherEstrelasHover(valor);
-    });
-
-    star.addEventListener('mouseleave', () => {
-      atualizarVisualEstrelas();
-    });
-  });
-}
-
-function preencherEstrelasHover(valor) {
-  const estrelas = document.querySelectorAll('#estrelas span');
-  estrelas.forEach(star => {
-    const starValor = parseInt(star.getAttribute('data-valor'));
-    star.textContent = starValor <= valor ? '★' : '☆';
-    star.style.color = starValor <= valor ? 'gold' : '#999';
-  });
-}
-
-function enviarAvaliacao() {
-  const comentario = document.getElementById('comentario').value.trim();
-  const produtoId = document.getElementById('produto-id').value;
-  const usuarioId = 1; // Substitua pelo id real do usuário logado
-
-  if (estrelasSelecionadas === 0) {
-    alert('Por favor, selecione uma quantidade de estrelas.');
-    return;
-  }
-
-  if (!comentario) {
-    alert('Digite um comentário antes de enviar.');
-    return;
-  }
-  
-
-  fetch('/avaliacoes', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      estrelas: estrelasSelecionadas,
-      comentario,
-      produtoId,
-      usuarioId
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    alert(data.message || 'Avaliação enviada!');
-    document.getElementById('comentario').value = '';
-    estrelasSelecionadas = 0;
-    atualizarVisualEstrelas();
-    carregarAvaliacoes(produtoId);
-  })
-  .catch(err => {
-    console.error('Erro:', err);
-    alert('Erro ao enviar avaliação. Tente novamente.');
-  });
-
-  console.log({
-  estrelas: estrelasSelecionadas,
-  comentario,
-  produtoId,
-  usuarioId
-});
-
-}
-
-function carregarAvaliacoes(produtoId) {
-  fetch(`/avaliacoes/${produtoId}`)
-    .then(res => res.json())
-    .then(avaliacoes => {
-      const lista = document.getElementById('lista-avaliacoes');
-      lista.innerHTML = '';
-      if(avaliacoes.length === 0) {
-        lista.innerHTML = '<p>Nenhuma avaliação ainda.</p>';
-        return;
-      }
-   avaliacoes.forEach(a => {
-  const div = document.createElement('div');
-  div.innerHTML = `
-    <p><strong>${'★'.repeat(a.estrelas)}${'☆'.repeat(5 - a.estrelas)}</strong></p>
-    <p><strong>${a.nome_usuario}</strong></p>
-    <p>${a.comentario}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/produtos.css">
+    <title>MlDecoração - Produto</title>
+</head>
+<body>
     
+    <header>
+        <h1>MlDecoração</h1>
 
-    <hr>
-  `;
-   const btnExcluir = document.createElement('button');
-        btnExcluir.textContent = 'Excluir';
-        btnExcluir.addEventListener('click', () => deletarAvaliacao(a.id_avaliacao));
-        div.appendChild(btnExcluir);
+        <div class="container">
+            <div class="containerOption">
+                <img src="../file/shopping-cart.png" alt="Carrinho de compras">
+                <img src="../file/hearth.png" alt="Favoritos">
+            </div>
 
-        div.appendChild(document.createElement('hr'));
+            <div class="ImageUser"></div>
+        </div>
+    </header>
 
-        lista.appendChild(div);
-});
+    <nav>
+        <button id="button-all"><span class="menu-icon">☰</span> Todas as Categorias</button>
+        <button><span class="search-icon">🔍</span> Fale Conosco</button>
+    </nav>
 
-    })
-    .catch(err => {
-      console.error('Erro ao carregar avaliações:', err);
-    });
-}
+    
+    <div id="dropdown-menu" class="menucult">
+        <button>Login ou Cadastra-se</button>
+        <button>Notificação</button>
+        <button>Configuração</button>
+    </div>
+
+    <div class="placeback">
+        <button onclick="window.location.href='../views/Home.html'">Voltar</button>
+    </div>
+
+    <main>
+
+        <div class="container-produtos">
+
+            <div class="foto-produto">
+    <div class="carousel">
+        <button class="prev">&#10094;</button>
+
+        <img class="carousel-img active" src="../imagens_div/produtos/festa_safari.webp" alt="Imagem 1">
+        <img class="carousel-img active" src="../file/produto2.jpg" alt="Imagem 2">
+        <img class="carousel-img active" src="../file/produto3.jpg" alt="Imagem 3">
+
+        <button class="next">&#10095;</button>
+    </div>
+</div>
+
+            <div class="Informaçoes-all">
+                
+                <div class="Informaçoes-geral">
+                <div class="name-heart">
+  <p>Decoração de Aniversario Tubarãos</p>
+<a id="btn-favorito" aria-label="Favorito">♡</a>
+
+</div>
+
+                    <div class="price-star">
+            <p>Preço R$ 700</p>
+                    
+  <div class="estrelas" id="estrelas" style="display: flex; gap: 5px; font-size: 24px; cursor: pointer;">
+  <span data-valor="1">&#9734;</span>
+  <span data-valor="2">&#9734;</span>
+  <span data-valor="3">&#9734;</span>
+  <span data-valor="4">&#9734;</span>
+  <span data-valor="5">&#9734;</span>
+</div>
+
+                 
+                
+                 
+                    </div>
+                </div>
+                <div class="descricao">
+                   <p>
+                     A decoração de aniversário com tema de tubarão une aventura e criatividade, tornando a festa ainda mais especial e inesquecível.
+                        </p>
+
+                    <p>
+                     Com cores vibrantes, elementos do fundo do mar e detalhes divertidos, esse tema é perfeito para encantar crianças e impressionar os convidados.
+                    </p>
+                        
+                    
+                </div>
 
 
-document.addEventListener('DOMContentLoaded', () => {
-  configurarEstrelas();
-  atualizarVisualEstrelas();
+                <div class="button-reservar">
+                    <button>Reservar</button>
+                </div>
 
-  const produtoId = document.getElementById('produto-id').value;
-  carregarAvaliacoes(produtoId);
-});
+            </div>
 
 
-  function deletarAvaliacao(idAvaliacao) {
-     console.log('ID recebido para deletar:', idAvaliacao);
-  if (!confirm('Tem certeza que deseja excluir esta avaliação?')) return;
 
-   
-
-  fetch(`/avaliacoes/${idAvaliacao}`, {
-    method: 'DELETE'
-  })
-  .then(res => res.json())
-  .then(data => {
-    alert(data.message || 'Avaliação removida');
-    const produtoId = document.getElementById('produto-id').value;
-    carregarAvaliacoes(produtoId); // Recarrega lista
-  })
-  .catch(err => {
-    console.error('Erro ao excluir:', err);
-    alert('Erro ao excluir avaliação.');
-  });
-}
+        </div>
 
 
-//favoritos
-const btnFavorito = document.getElementById('btn-favorito');
-  const produtoId = document.getElementById('produto-id').value; // ou outro jeito de pegar o id
-  const usuarioId = 1; // exemplo, pegue dinamicamente do login
+    </main>
 
-  btnFavorito.addEventListener('click', async () => {
-    try {
-      const response = await fetch('/favoritos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ produtoId, usuarioId }),
-      });
-      const data = await response.json();
+    <section>
 
-      if (data.sucesso) {
-        if (data.favorito) {
-          btnFavorito.classList.add('favorito');
-          btnFavorito.textContent = '♥'; // cheio e vermelho
-        } else {
-          btnFavorito.classList.remove('favorito');
-          btnFavorito.textContent = '♡'; // vazio e cinza
-        }
-      } else {
-        alert('Erro ao favoritar: ' + data.mensagem);
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Erro na comunicação com o servidor.');
-    }
-  });
+      <div class="user-comentario">
+            <div class="foto-user"></div>
+            <p>nome do usuario</p>
+     <input type="hidden" id="produto-id" value="1">
+    <input type="text" id="comentario" placeholder="Digite sua opinião sobre o Produto">
+    <button onclick="enviarAvaliacao()">Enviar</button>
+    
+  </div>
+<div id="lista-avaliacoes" style="width: 100%; max-width: 500px;"></div>
+     
 
+
+
+    </section>
+
+
+    <footer>
+
+        <div class="infoMain">
+
+            <div class="infoSecond">
+
+                <div class="Symbol"></div>
+                <p>Transformamos sonhos em realidade com excelência e dedicação.</p>
+                <p>Siga-nos</p>
+                <p>Instagram: </p>
+                <p>Email:</p>
+                <p>telefone:</p>
+            </div>
+
+            <div class="Map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62228.85624321189!2d-38.5167100500323!3d-12.888194665843509!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x716115fe4655131%3A0x4630a84a0e5afc85!2zTUwgZGVjb3Jhw6fDo28gJiBFdmVudG9z!5e0!3m2!1spt-BR!2sbr!4v1745356729670!5m2!1spt-BR!2sbr"
+                    width="600" height="270" class="maps" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+
+        </div>
+
+
+        <div class="copy">
+            <p>© 2016 ML Decor Inc. All Rights Reserved.</p>
+        </div>
+
+    </footer>
+
+<script src="/script/produtos.js"></script>
+
+
+
+</body>
+</html>
