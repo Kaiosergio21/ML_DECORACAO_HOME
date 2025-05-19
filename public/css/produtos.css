@@ -45,7 +45,82 @@ header h1{
     margin-left: 20px;
 }
 
+.carousel {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    overflow: hidden;
+}
 
+.carousel-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 400px;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-img.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.carousel button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(44, 44, 44, 0.7);
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 2;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.carousel .prev {
+    left: 0;
+}
+
+.carousel .next {
+    right: 0;
+}
+
+  #btn-favorito {
+    font-size: 40px;
+    color: gray;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  #btn-favorito.favorito {
+    color: red;
+  }
+
+.estrelas {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  font-size: 30px;  /* tamanho da estrela */
+  cursor: pointer;  /* mostra que pode clicar */
+  color: #999;      /* cor cinza padrão */
+  user-select: none; /* evita seleção ao clicar */
+}
+
+.estrelas span:hover,
+.estrelas span:hover ~ span {
+  color: gold; /* destaca ao passar o mouse */
+}
+
+.estrelas .ativa {
+  color: gold; /* estrelas selecionadas em dourado */
+}
 
 
 .header-icons img,
